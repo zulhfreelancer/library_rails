@@ -1,0 +1,25 @@
+version: '2'
+
+services:
+  postgres:
+    image: postgres:9.4.5
+    environment:
+      POSTGRES_USER: db_user
+      POSTGRES_PASSWORD: db_password
+    ports:
+      - '5432:5432'
+    volumes:
+      - library-postgres:/var/lib/postgresql/data
+
+  web:
+    build: .
+    volumes:
+      - .:/library
+    ports:
+      - '3000:3000'
+    env_file:
+      - .production-mock.env
+    command: ["bash", "/library/start-docker.sh"]
+
+volumes:
+  library-postgres:
